@@ -239,16 +239,22 @@
       </aside>
 
       <!-- CONTENIDO PRINCIPAL (DERECHA) -->
-      <main class="flex-1 min-w-0 space-y-4">
-        
-        <!-- Pestañas de Vista -->
-        <div class="panel-soft px-4 pt-3.5 rounded-2xl shadow-xs flex border-b border-gray-200 gap-8">
-          <button id="btnTabResumen" class="tab-btn active pb-3 text-sm font-medium transition" onclick="switchTab('resumen')">
-            Resumen por Empleado
-          </button>
-          <button id="btnTabDetalle" class="tab-btn pb-3 text-sm font-medium text-gray-500 hover:text-gray-800 transition" onclick="switchTab('detalle')">
-            Detalle Diario (Llegadas y Salidas)
-          </button>
+        <!-- Pestañas de Vista y Botón de Versión / Actualización -->
+        <div class="panel-soft px-4 pt-3.5 pb-2 rounded-2xl shadow-xs flex flex-wrap items-center justify-between border-b border-gray-200 gap-4">
+          <div class="flex items-center gap-8">
+            <button id="btnTabResumen" class="tab-btn active pb-3 text-sm font-medium transition" onclick="switchTab('resumen')">
+              Resumen por Empleado
+            </button>
+            <button id="btnTabDetalle" class="tab-btn pb-3 text-sm font-medium text-gray-500 hover:text-gray-800 transition" onclick="switchTab('detalle')">
+              Detalle Diario (Llegadas y Salidas)
+            </button>
+          </div>
+
+          <!-- Botón de Versión / Actualización Arriba a la Derecha -->
+          <a id="btnVersionCheck" href="https://github.com/pontro/control-de-asistencias/releases" target="_blank" title="Versión actual instalada" class="mb-1 inline-flex items-center gap-2 px-3 py-1 bg-sky-50 hover:bg-sky-100 text-[#0d3b66] border border-sky-200/90 rounded-xl text-xs font-semibold shadow-2xs transition-all duration-200">
+            <span id="versionDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
+            <span id="versionText">v1.0.0</span>
+          </a>
         </div>
 
         <!-- Contenido Pestaña 1: Resumen (Predeterminado) -->
@@ -453,9 +459,62 @@
   <script>
     lucide.createIcons();
 
+    const APP_CURRENT_VERSION = "v1.0.0";
+    const GITHUB_REPO = "pontro/control-de-asistencias";
+
     let listaDetalles = [];
     let listaResumen = [];
     let globalRawCSV = "";
+
+    // Comprobar actualizaciones automáticamente al abrir la aplicación
+    verificarActualizaciones();
+
+    async function verificarActualizaciones() {
+      const btn = document.getElementById('btnVersionCheck');
+      const textEl = document.getElementById('versionText');
+      const dotEl = document.getElementById('versionDot');
+      if (!btn || !textEl) return;
+
+      textEl.innerText = APP_CURRENT_VERSION;
+
+      try {
+        const response = await fetch(`https://api.github.com/repos/${GITHUB_REPO}/releases/latest`, {
+          headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
+
+        if (!response.ok) return;
+
+        const data = await response.json();
+        const latestTag = data.tag_name;
+
+        if (latestTag && compararVersiones(latestTag, APP_CURRENT_VERSION) > 0) {
+          btn.classList.remove('bg-sky-50', 'text-[#0d3b66]', 'border-sky-200/90');
+          btn.classList.add('bg-[#0d3b66]', 'text-white', 'hover:bg-[#092846]', 'border-[#0d3b66]', 'shadow-sm', 'animate-pulse');
+          if (dotEl) {
+            dotEl.classList.remove('bg-emerald-500');
+            dotEl.classList.add('bg-amber-400');
+          }
+          textEl.innerHTML = `🚀 Actualizar (${latestTag})`;
+          btn.title = `¡Nueva versión disponible ${latestTag}! Haz clic para descargar.`;
+          btn.href = data.html_url || `https://github.com/${GITHUB_REPO}/releases/latest`;
+        }
+      } catch (err) {
+        console.log("Comprobación offline: no se pudo consultar GitHub.");
+      }
+    }
+
+    function compararVersiones(vNueva, vActual) {
+      const clean = (v) => v.replace(/^v/i, '').split('.').map(Number);
+      const a = clean(vNueva);
+      const b = clean(vActual);
+      for (let i = 0; i < Math.max(a.length, b.length); i++) {
+        const numA = a[i] || 0;
+        const numB = b[i] || 0;
+        if (numA > numB) return 1;
+        if (numA < numB) return -1;
+      }
+      return 0;
+    }
 
     fetch('./asistencias_crudo.csv')
       .then(r => r.text())
