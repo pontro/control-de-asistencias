@@ -1,0 +1,11 @@
+# Archivos de datos reales y reportes locales
+asistencias_crudo.csv
+asistencias_detalle.csv
+asistencias_resumen.csv
+asistencias_limpias_*.xlsx
+*.log
+
+# Archivos de sistema y temporales
+.DS_Store
+Thumbs.db
+*.tmp
