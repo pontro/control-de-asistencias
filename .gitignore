@@ -7,7 +7,8 @@ asistencias_limpias_*.xlsx
 
 # Archivos de identidad / logos locales
 logo_isaac_newton.png
-*.png
+!app_logo.png
+!app_icon.ico
 
 # Archivos de sistema y temporales
 .DS_Store
