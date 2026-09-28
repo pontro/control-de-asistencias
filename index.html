@@ -492,15 +492,28 @@
         const latestTag = data.tag_name;
 
         if (latestTag && compararVersiones(latestTag, APP_CURRENT_VERSION) > 0) {
+          // Buscar enlace de descarga directa del .exe en el Release
+          let exeDownloadUrl = "";
+          if (data.assets && Array.isArray(data.assets)) {
+            const exeAsset = data.assets.find(a => a.name && a.name.toLowerCase().endsWith('.exe'));
+            if (exeAsset && exeAsset.browser_download_url) {
+              exeDownloadUrl = exeAsset.browser_download_url;
+            }
+          }
+          if (!exeDownloadUrl) {
+            exeDownloadUrl = `https://github.com/${GITHUB_REPO}/releases/download/${latestTag}/ControlDeAsistencias.exe`;
+          }
+
           btn.classList.remove('bg-sky-50', 'text-[#0d3b66]', 'border-sky-200/90');
           btn.classList.add('bg-[#0d3b66]', 'text-white', 'hover:bg-[#092846]', 'border-[#0d3b66]', 'shadow-sm', 'animate-pulse');
           if (dotEl) {
             dotEl.classList.remove('bg-emerald-500');
             dotEl.classList.add('bg-amber-400');
           }
-          textEl.innerHTML = `🚀 Actualizar (${latestTag})`;
-          btn.title = `¡Nueva versión disponible ${latestTag}! Haz clic para descargar.`;
-          btn.href = data.html_url || `https://github.com/${GITHUB_REPO}/releases/latest`;
+          textEl.innerHTML = `🚀 Descargar (${latestTag})`;
+          btn.title = `Haz clic para descargar directamente la nueva versión (${latestTag})`;
+          btn.href = exeDownloadUrl;
+          btn.removeAttribute('target');
         }
       } catch (err) {
         console.log("Comprobación offline: no se pudo consultar GitHub.");
