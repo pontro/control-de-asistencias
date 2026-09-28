@@ -5,6 +5,10 @@ asistencias_resumen.csv
 asistencias_limpias_*.xlsx
 *.log
 
+# Archivos de identidad / logos locales
+logo_isaac_newton.png
+*.png
+
 # Archivos de sistema y temporales
 .DS_Store
 Thumbs.db

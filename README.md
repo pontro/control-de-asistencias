@@ -41,7 +41,6 @@ Diseñado para ejecutarse **100% en el navegador del cliente (Client-Side)** sin
 ```text
 ├── index.html                           # Aplicación Web completa (Single-Page App)
 ├── procesar_asistencias.ps1             # Script de automatización en PowerShell
-├── generar_muestras_excel.ps1           # Generador de archivos de muestra
 ├── ejemplo_formato_5_columnas.xlsx      # Archivo de prueba (5 columnas)
 ├── ejemplo_formato_4_columnas_ampm.xlsx # Archivo de prueba (4 columnas AM/PM)
 ├── ejemplo_formato_4_columnas_24h.xlsx  # Archivo de prueba (4 columnas 24h)
