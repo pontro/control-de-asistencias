@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -53,7 +53,7 @@
       margin: 10mm 12mm 10mm 12mm;
     }
     
-    /* Reglas para vista previa e impresiÃ³n limpia multipÃ¡gina */
+    /* Reglas para vista previa e impresion limpia multipagina */
     @media print {
       html, body {
         height: auto !important;
@@ -70,7 +70,7 @@
         display: none !important;
       }
 
-      /* Desplegar el modal en flujo normal de pÃ¡gina completa */
+      /* Desplegar el modal en flujo normal de pagina completa */
       #modalPreview {
         display: block !important;
         position: static !important;
@@ -120,7 +120,7 @@
         box-shadow: none !important;
       }
 
-      /* Control de tablas para que fluyan en varias pÃ¡ginas */
+      /* Control de tablas para que fluyan en varias paginas */
       table {
         width: 100% !important;
         page-break-inside: auto !important;
@@ -151,7 +151,7 @@
       <!-- SIDEBAR IZQUIERDA -->
       <aside class="w-full lg:w-80 shrink-0 panel-soft rounded-2xl p-5 shadow-xs space-y-6 sticky top-6">
         
-        <!-- Logo y TÃ­tulo con BotÃ³n de VersiÃ³n -->
+        <!-- Logo y Titulo con Boton de Version -->
         <div class="pb-4 border-b border-gray-200 space-y-3">
           <div class="flex items-center gap-3">
             <div class="w-11 h-11 rounded-xl shadow-xs shrink-0 overflow-hidden bg-white p-1 border border-gray-200/80 flex items-center justify-center">
@@ -163,23 +163,23 @@
             </div>
           </div>
 
-          <!-- BotÃ³n de VersiÃ³n / ActualizaciÃ³n en el lado izquierdo -->
+          <!-- Boton de Version / Actualizacion en el lado izquierdo -->
           <div>
-            <a id="btnVersionCheck" href="https://github.com/pontro/control-de-asistencias/releases" target="_blank" title="VersiÃ³n actual instalada" class="inline-flex items-center gap-2 px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-[#0d3b66] border border-sky-200/90 rounded-lg text-xs font-semibold shadow-2xs transition-all duration-200">
+            <a id="btnVersionCheck" href="https://github.com/pontro/control-de-asistencias/releases" target="_blank" title="Version actual instalada" class="inline-flex items-center gap-2 px-2.5 py-1 bg-sky-50 hover:bg-sky-100 text-[#0d3b66] border border-sky-200/90 rounded-lg text-xs font-semibold shadow-2xs transition-all duration-200">
               <span id="versionDot" class="w-2 h-2 rounded-full bg-emerald-500"></span>
               <span id="versionText">v1.0.0</span>
             </a>
           </div>
         </div>
 
-        <!-- ParÃ¡metros del Periodo (Inputs) -->
+        <!-- Parametros del Periodo (Inputs) -->
         <div class="space-y-4">
           <!-- Input Entradas Totales -->
           <div class="bg-sky-50/70 p-3.5 rounded-xl border border-sky-200/80">
             <label for="inputBaseEntradas" class="block text-xs font-semibold text-[#0d3b66] mb-1.5">Entradas Totales Esperadas</label>
             <div class="flex items-center gap-2">
               <input type="number" id="inputBaseEntradas" value="18" min="1" max="60" class="w-full text-lg font-bold text-[#0d3b66] bg-white border border-sky-300 rounded-lg px-3 py-1.5 focus:outline-none focus:border-sky-500 shadow-xs">
-              <span class="text-xs text-sky-700 font-medium">dÃ­as</span>
+              <span class="text-xs text-sky-700 font-medium">dias</span>
             </div>
           </div>
 
@@ -188,7 +188,7 @@
             <label for="inputBaseSalidas" class="block text-xs font-semibold text-gray-700 mb-1.5">Salidas Totales Esperadas</label>
             <div class="flex items-center gap-2">
               <input type="number" id="inputBaseSalidas" value="17" min="0" max="60" class="w-full text-lg font-bold text-gray-700 bg-white border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:border-gray-500 shadow-xs">
-              <span class="text-xs text-gray-500 font-medium">dÃ­as</span>
+              <span class="text-xs text-gray-500 font-medium">dias</span>
             </div>
           </div>
 
@@ -197,8 +197,8 @@
             <label class="flex items-start gap-2.5 cursor-pointer">
               <input type="checkbox" id="chkExcluirSabados" class="w-4 h-4 mt-0.5 rounded text-[#0d3b66] bg-white border-gray-300 focus:ring-[#0d3b66] cursor-pointer">
               <div class="text-xs select-none">
-                <span class="font-semibold text-gray-700 block">Omitir SÃ¡bados / Domingos</span>
-                <span class="text-gray-500 text-[11px]">Ignora marcas de fin de semana (ej. SÃ¡bado 12/09)</span>
+                <span class="font-semibold text-gray-700 block">Omitir Sabados / Domingos</span>
+                <span class="text-gray-500 text-[11px]">Ignora marcas de fin de semana (ej. Sabado 12/09)</span>
               </div>
             </label>
           </div>
@@ -217,7 +217,7 @@
               <i data-lucide="upload-cloud" class="w-5 h-5 text-gray-500 group-hover:text-white transition-colors"></i>
             </div>
             <div>
-              <p class="text-xs font-semibold text-gray-700 group-hover:text-[#0d3b66] transition-colors">Arrastra tu archivo aquÃ­</p>
+              <p class="text-xs font-semibold text-gray-700 group-hover:text-[#0d3b66] transition-colors">Arrastra tu archivo aqui</p>
               <p class="text-[11px] text-gray-400">o haz clic para examinar</p>
             </div>
             <span class="inline-block px-2 py-0.5 text-[10px] font-medium tracking-wide bg-gray-200 text-gray-700 rounded-md">
@@ -235,13 +235,13 @@
             <span id="fileLoadedCount" class="text-[10px] bg-sky-200 text-sky-800 font-bold px-1.5 py-0.5 rounded-md shrink-0">0 reg</span>
           </div>
 
-          <!-- BotÃ³n Vista Previa -->
+          <!-- Boton Vista Previa -->
           <button id="btnAbrirPreview" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 rounded-xl text-xs font-bold shadow-xs transition">
             <i data-lucide="eye" class="w-4 h-4 text-[#0d3b66]"></i>
             <span>Vista Previa del Reporte</span>
           </button>
 
-          <!-- BotÃ³n Exportar -->
+          <!-- Boton Exportar -->
           <button id="btnExportExcel" class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-[#0d3b66] hover:bg-[#092846] text-white rounded-xl text-xs font-bold shadow-sm transition">
             <i data-lucide="file-spreadsheet" class="w-4 h-4 text-sky-200"></i>
             <span>Descargar Excel Limpio (.xlsx)</span>
@@ -253,7 +253,7 @@
       <!-- CONTENIDO PRINCIPAL (DERECHA) -->
       <main class="flex-1 min-w-0 space-y-4">
         
-        <!-- PestaÃ±as de Vista -->
+        <!-- Pestanas de Vista -->
         <div class="panel-soft px-4 pt-3.5 rounded-2xl shadow-xs flex border-b border-gray-200 gap-8">
           <button id="btnTabResumen" class="tab-btn active pb-3 text-sm font-medium transition" onclick="switchTab('resumen')">
             Resumen por Empleado
@@ -263,7 +263,7 @@
           </button>
         </div>
 
-        <!-- Contenido PestaÃ±a 1: Resumen (Predeterminado) -->
+        <!-- Contenido Pestana 1: Resumen (Predeterminado) -->
         <div id="tabResumen" class="space-y-4">
           <div class="panel-soft rounded-2xl overflow-hidden shadow-xs">
             <div class="overflow-x-auto max-h-[640px]">
@@ -273,19 +273,19 @@
                     <th class="py-3.5 px-4">Empleado</th>
                     <th class="py-3.5 px-4 text-center bg-sky-100/60 text-[#0d3b66]">Entradas (Reg / Total)</th>
                     <th class="py-3.5 px-4 text-center bg-gray-200/60 text-gray-800">Salidas (Reg / Total)</th>
-                    <th class="py-3.5 px-4 text-center">DÃ­as Asistidos</th>
+                    <th class="py-3.5 px-4 text-center">Dias Asistidos</th>
                     <th class="py-3.5 px-4 text-center text-[#e63946]">Faltas Marca</th>
                   </tr>
                 </thead>
                 <tbody id="tbodyResumen" class="divide-y divide-gray-200 text-gray-700 font-normal">
-                  <!-- Render dinÃ¡mico -->
+                  <!-- Render dinamico -->
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- Contenido PestaÃ±a 2: Detalle (Oculto por defecto) -->
+        <!-- Contenido Pestana 2: Detalle (Oculto por defecto) -->
         <div id="tabDetalle" class="hidden space-y-4">
           <!-- Filtros -->
           <div class="panel-soft p-4 rounded-2xl shadow-xs flex flex-wrap gap-4 items-center justify-between">
@@ -297,9 +297,9 @@
                 </select>
               </div>
               <div>
-                <label class="block text-xs font-medium text-stone-500 mb-1">Filtrar por DÃ­a / Fecha:</label>
+                <label class="block text-xs font-medium text-stone-500 mb-1">Filtrar por Dia / Fecha:</label>
                 <select id="filtroFecha" class="text-sm bg-white text-gray-700 border border-gray-300 rounded-lg px-3 py-1.5 focus:outline-none focus:border-[#0d3b66] shadow-xs">
-                  <option value="TODOS">Todos los DÃ­as</option>
+                  <option value="TODOS">Todos los Dias</option>
                 </select>
               </div>
               <div>
@@ -329,14 +329,14 @@
                   </tr>
                 </thead>
                 <tbody id="tbodyDetalle" class="divide-y divide-gray-200 text-gray-700 font-normal">
-                  <!-- Render dinÃ¡mico -->
+                  <!-- Render dinamico -->
                 </tbody>
               </table>
             </div>
           </div>
         </div>
 
-        <!-- Fin Contenido PestaÃ±a 2 -->
+        <!-- Fin Contenido Pestana 2 -->
 
       </main>
       <!-- Fin Main -->
@@ -359,7 +359,7 @@
           </span>
           <div>
             <h3 class="text-sm font-bold text-gray-800">Vista Previa del Reporte</h3>
-            <p class="text-[11px] text-gray-500">VisualizaciÃ³n en formato documento institucional</p>
+            <p class="text-[11px] text-gray-500">Visualizacion en formato documento institucional</p>
           </div>
         </div>
 
@@ -370,13 +370,13 @@
             <button id="btnPrevTabDetalle" class="px-3 py-1 text-gray-600 hover:text-gray-900 rounded-md transition" onclick="switchPreviewTab('detalle')">Detalle</button>
           </div>
 
-          <!-- BotÃ³n Imprimir -->
+          <!-- Boton Imprimir -->
           <button onclick="window.print()" class="flex items-center gap-1.5 px-3 py-1.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-xs font-semibold border border-gray-300 transition">
             <i data-lucide="printer" class="w-3.5 h-3.5"></i>
             <span>Imprimir</span>
           </button>
 
-          <!-- BotÃ³n Cerrar -->
+          <!-- Boton Cerrar -->
           <button onclick="cerrarModalPreview()" class="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition">
             <i data-lucide="x" class="w-5 h-5"></i>
           </button>
@@ -401,8 +401,8 @@
               </div>
             </div>
             <div class="text-left sm:text-right text-xs space-y-0.5 text-gray-600">
-              <p><span class="font-bold text-gray-800">Fecha de EmisiÃ³n:</span> <span id="prevFechaEmision">-</span></p>
-              <p><span class="font-bold text-gray-800">ParÃ¡metros:</span> <span id="prevParametrosTexto">-</span></p>
+              <p><span class="font-bold text-gray-800">Fecha de Emision:</span> <span id="prevFechaEmision">-</span></p>
+              <p><span class="font-bold text-gray-800">Parametros:</span> <span id="prevParametrosTexto">-</span></p>
               <p><span class="font-bold text-gray-800">Estado:</span> <span class="text-emerald-700 font-semibold">Validado / Limpio</span></p>
             </div>
           </div>
@@ -433,10 +433,10 @@
             <div class="border border-gray-200 rounded-lg overflow-hidden">
               <table class="w-full text-left text-xs border-collapse">
                 <thead id="prevThead" class="bg-gray-100 text-gray-700 font-bold border-b border-gray-200">
-                  <!-- Inyectado dinÃ¡micamente -->
+                  <!-- Inyectado dinamicamente -->
                 </thead>
                 <tbody id="prevTbody" class="divide-y divide-gray-200">
-                  <!-- Inyectado dinÃ¡micamente -->
+                  <!-- Inyectado dinamicamente -->
                 </tbody>
               </table>
             </div>
@@ -447,7 +447,7 @@
 
       <!-- Barra Inferior de Acciones del Modal -->
       <div id="previewModalFooterActions" class="bg-gray-50 px-6 py-3.5 border-t border-gray-200 flex items-center justify-between">
-        <span class="text-xs text-gray-500">Revisa la informaciÃ³n antes de imprimir o exportar</span>
+        <span class="text-xs text-gray-500">Revisa la informacion antes de imprimir o exportar</span>
         <div class="flex items-center gap-3">
           <button onclick="cerrarModalPreview()" class="px-4 py-2 bg-white hover:bg-gray-100 text-gray-700 text-xs font-bold border border-gray-300 rounded-xl transition">
             Cerrar Vista Previa
@@ -472,7 +472,7 @@
     let listaResumen = [];
     let globalRawCSV = "";
 
-    // Comprobar actualizaciones automÃ¡ticamente al abrir la aplicaciÃ³n
+    // Comprobar actualizaciones automaticamente al abrir la aplicacion
     verificarActualizaciones();
 
     async function verificarActualizaciones() {
@@ -513,11 +513,11 @@
             dotEl.classList.add('bg-amber-400');
           }
           textEl.innerHTML = `ðŸš€ Descargar (${latestTag})`;
-          btn.title = `Haz clic para descargar directamente la nueva versiÃ³n (${latestTag})`;
+          btn.title = `Haz clic para descargar directamente la nueva version (${latestTag})`;
           btn.href = exeDownloadUrl;
           btn.removeAttribute('target');
         } else {
-          // VersiÃ³n al dÃ­a
+          // Version al dia
           btn.classList.remove('bg-[#0d3b66]', 'text-white', 'hover:bg-[#092846]', 'border-[#0d3b66]', 'shadow-sm', 'animate-pulse');
           btn.classList.add('bg-sky-50', 'text-[#0d3b66]', 'border-sky-200/90');
           if (dotEl) {
@@ -525,12 +525,12 @@
             dotEl.classList.add('bg-emerald-500');
           }
           textEl.innerText = APP_CURRENT_VERSION;
-          btn.title = `EstÃ¡s en la versiÃ³n mÃ¡s reciente (${APP_CURRENT_VERSION})`;
+          btn.title = `Estas en la version mas reciente (${APP_CURRENT_VERSION})`;
           btn.href = `https://github.com/${GITHUB_REPO}/releases`;
           btn.target = "_blank";
         }
       } catch (err) {
-        console.log("ComprobaciÃ³n offline: no se pudo consultar GitHub.");
+        console.log("Comprobacion offline: no se pudo consultar GitHub.");
       }
     }
 
@@ -792,7 +792,7 @@
         const pb = b.split('/');
         return (pa[2] + pa[1] + pa[0]).localeCompare(pb[2] + pb[1] + pb[0]);
       });
-      selectFecha.innerHTML = '<option value="TODOS">Todos los DÃ­as (' + fechasUnicas.length + ' fechas)</option>';
+      selectFecha.innerHTML = '<option value="TODOS">Todos los Dias (' + fechasUnicas.length + ' fechas)</option>';
       fechasUnicas.forEach(f => {
         selectFecha.innerHTML += `<option value="${f}">${f}</option>`;
       });
@@ -927,7 +927,7 @@
       const wb = XLSX.utils.book_new();
 
       const resumenData = [
-        ["Empleado", "Entradas (Registradas/Total)", "Salidas (Registradas/Total)", "DÃ­as Asistidos", "Faltas de Marca"],
+        ["Empleado", "Entradas (Registradas/Total)", "Salidas (Registradas/Total)", "Dias Asistidos", "Faltas de Marca"],
         ...listaResumen.map(r => [
           r.nombre, r.entradasRatio, r.salidasRatio, r.diasAsistidos, r.incompletos
         ])
@@ -978,12 +978,12 @@
       const baseEntradas = document.getElementById('inputBaseEntradas').value || '18';
       const baseSalidas = document.getElementById('inputBaseSalidas').value || '17';
       const excluirFines = document.getElementById('chkExcluirSabados').checked;
-      document.getElementById('prevParametrosTexto').innerText = `${baseEntradas} Entradas / ${baseSalidas} Salidas (${excluirFines ? 'Sin fines de semana' : 'Todos los dÃ­as'})`;
+      document.getElementById('prevParametrosTexto').innerText = `${baseEntradas} Entradas / ${baseSalidas} Salidas (${excluirFines ? 'Sin fines de semana' : 'Todos los dias'})`;
 
-      // MÃ©tricas de tarjetas
+      // Metricas de tarjetas
       document.getElementById('prevTotalPersonal').innerText = `${listaResumen.length} empleados`;
-      document.getElementById('prevEntradasEsperadas').innerText = `${baseEntradas} dÃ­as`;
-      document.getElementById('prevSalidasEsperadas').innerText = `${baseSalidas} dÃ­as`;
+      document.getElementById('prevEntradasEsperadas').innerText = `${baseEntradas} dias`;
+      document.getElementById('prevSalidasEsperadas').innerText = `${baseSalidas} dias`;
 
       const totalFaltas = listaResumen.reduce((acc, curr) => acc + (curr.incompletos || 0), 0);
       document.getElementById('prevTotalFaltas').innerText = `${totalFaltas} incidencias`;
@@ -1028,7 +1028,7 @@
             <th class="py-2.5 px-3">Empleado</th>
             <th class="py-2.5 px-3 text-center">Entradas (Reg / Esperadas)</th>
             <th class="py-2.5 px-3 text-center">Salidas (Reg / Esperadas)</th>
-            <th class="py-2.5 px-3 text-center">DÃ­as Asistidos</th>
+            <th class="py-2.5 px-3 text-center">Dias Asistidos</th>
             <th class="py-2.5 px-3 text-center">Faltas de Marca</th>
           </tr>
         `;
