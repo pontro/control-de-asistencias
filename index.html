@@ -463,7 +463,7 @@
   <script>
     lucide.createIcons();
 
-    const APP_CURRENT_VERSION = "v1.0.0";
+    const APP_CURRENT_VERSION = "v1.0.1";
     const GITHUB_REPO = "pontro/control-de-asistencias";
 
     let listaDetalles = [];
@@ -514,6 +514,18 @@
           btn.title = `Haz clic para descargar directamente la nueva versión (${latestTag})`;
           btn.href = exeDownloadUrl;
           btn.removeAttribute('target');
+        } else {
+          // Versión al día
+          btn.classList.remove('bg-[#0d3b66]', 'text-white', 'hover:bg-[#092846]', 'border-[#0d3b66]', 'shadow-sm', 'animate-pulse');
+          btn.classList.add('bg-sky-50', 'text-[#0d3b66]', 'border-sky-200/90');
+          if (dotEl) {
+            dotEl.classList.remove('bg-amber-400');
+            dotEl.classList.add('bg-emerald-500');
+          }
+          textEl.innerText = APP_CURRENT_VERSION;
+          btn.title = `Estás en la versión más reciente (${APP_CURRENT_VERSION})`;
+          btn.href = `https://github.com/${GITHUB_REPO}/releases`;
+          btn.target = "_blank";
         }
       } catch (err) {
         console.log("Comprobación offline: no se pudo consultar GitHub.");
