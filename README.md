@@ -40,6 +40,8 @@ Diseñado para ejecutarse **100% en el navegador del cliente (Client-Side)** sin
 
 ```text
 ├── index.html                           # Aplicación Web completa (Single-Page App)
+├── app_logo.png                         # Logo oficial de la aplicación
+├── app_icon.ico                         # Icono oficial embebido en el ejecutable
 ├── procesar_asistencias.ps1             # Script de automatización en PowerShell
 ├── ejemplo_formato_5_columnas.xlsx      # Archivo de prueba (5 columnas)
 ├── ejemplo_formato_4_columnas_ampm.xlsx # Archivo de prueba (4 columnas AM/PM)
@@ -50,14 +52,29 @@ Diseñado para ejecutarse **100% en el navegador del cliente (Client-Side)** sin
 
 ---
 
-## 🚀 Inicio Rápido (Aplicación Web)
+## 📥 Descarga y Ejecución (.exe para Windows)
+
+Puedes utilizar la aplicación de dos formas:
+
+### 1. Aplicación de Escritorio Independiente (`.exe`) *(Recomendado para Windows)*
+No necesitas instalar navegadores adicionales ni dependencias. Descarga el ejecutable autónomo y ábrelo directamente:
+
+* 🚀 **[Descargar ControlDeAsistencias.exe (Última versión)](https://github.com/pontro/control-de-asistencias/releases/latest/download/ControlDeAsistencias.exe)**
+* 📦 **[Ver todas las versiones y notas de la versión (GitHub Releases)](https://github.com/pontro/control-de-asistencias/releases)**
+
+> **Nota para Windows:** Al abrir por primera vez un ejecutable nuevo descargado de internet, es posible que Windows SmartScreen muestre una advertencia informativa. Haz clic en *"Más información"* y luego en *"Ejecutar de todas formas"*.
+> La aplicación incluye un comprobador automático de versiones que te notificará dentro del programa cuando exista una nueva actualización.
+
+---
+
+## 🚀 Inicio Rápido (Versión Web)
 
 1. Abre el archivo [`index.html`](file:///c:/Users/Nando%20Pontro/Desktop/Projects/isaacnewton/index.html) en cualquier navegador web moderno (Google Chrome, Microsoft Edge, Firefox, Safari).
 2. Arrastra tu archivo de asistencias (`.xlsx`, `.xls` o `.csv`) a la zona de carga o haz clic para seleccionarlo.
 3. Ajusta las **Entradas y Salidas Esperadas** del periodo en el panel lateral según el calendario laboral.
 4. Explora las pestañas:
-   * **Resumen por Empleado**: Cumplimiento general, entradas, salidas, días asistidos y faltas de marca.
-   * **Detalle Diario**: Registro histórico desglosado día a día con filtros avanzados.
+   * **Resumen por Empleado**: Cumplimiento general, entradas, salidas, dias asistidos y faltas de marca.
+   * **Detalle Diario**: Registro historico desglosado dia a dia con filtros avanzados.
 5. Haz clic en **Vista Previa del Reporte** para inspeccionar o imprimir, o en **Descargar Excel Limpio (.xlsx)** para exportar.
 
 ---
