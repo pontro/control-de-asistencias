@@ -10,7 +10,15 @@ logo_isaac_newton.png
 !app_logo.png
 !app_icon.ico
 
-# Archivos de sistema y temporales
+# Archivos compilados y binarios (se distribuyen vía GitHub Releases)
+*.exe
+*.dll
+*.pdb
+
+# Archivos temporales y de sistema
 .DS_Store
 Thumbs.db
 *.tmp
+*.jpg
+.vscode/
+.idea/
