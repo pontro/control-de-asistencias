@@ -4,6 +4,7 @@ param(
     [string]$RutaSalidaResumen = "",
     [int]$TotalEntradasEsperadas = 18,
     [int]$TotalSalidasEsperadas = 17,
+    [string]$HoraLimiteEntrada = "07:35",
     [switch]$ExcluirFinesDeSemana = $false
 )
 
@@ -12,9 +13,14 @@ if ([string]::IsNullOrWhiteSpace($RutaEntrada)) { $RutaEntrada = Join-Path $dire
 if ([string]::IsNullOrWhiteSpace($RutaSalidaDetalle)) { $RutaSalidaDetalle = Join-Path $directorio "asistencias_detalle.csv" }
 if ([string]::IsNullOrWhiteSpace($RutaSalidaResumen)) { $RutaSalidaResumen = Join-Path $directorio "asistencias_resumen.csv" }
 
+$hlParts = $HoraLimiteEntrada -split ":"
+$hlH = [int]$hlParts[0]
+$hlM = if ($hlParts.Count -ge 2) { [int]$hlParts[1] } else { 0 }
+$limiteSegundos = ($hlH * 3600) + ($hlM * 60)
+
 Write-Host "==========================================================" -ForegroundColor Cyan
 Write-Host "   PROCESADOR DE ASISTENCIAS - ISAAC NEWTON               " -ForegroundColor Cyan
-Write-Host "   Base Oficial: $TotalEntradasEsperadas Entradas / $TotalSalidasEsperadas Salidas" -ForegroundColor Cyan
+Write-Host "   Base Oficial: $TotalEntradasEsperadas Entradas / $TotalSalidasEsperadas Salidas (Hora Limite: $HoraLimiteEntrada)" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
 if (-not (Test-Path $RutaEntrada)) {
@@ -113,6 +119,7 @@ foreach ($g in $grupos) {
     
     $notasUnidas = ($items | Where-Object { -not [string]::IsNullOrWhiteSpace($_.Nota) } | ForEach-Object { $_.Nota } | Select-Object -Unique) -join "; "
     
+    $esRetraso = $false
     if ($items.Count -ge 2) {
         $primero = $items[0]
         $ultimo = $items[-1]
@@ -121,7 +128,8 @@ foreach ($g in $grupos) {
             if ($primero.Segundos -lt (12 * 3600)) {
                 $horaEntrada = $primero.Hora24
                 $horaSalida = ""
-                $estado = "Solo Entrada (Marcaje Duplicado)"
+                $esRetraso = $primero.Segundos -gt $limiteSegundos
+                $estado = if ($esRetraso) { "Retraso" } else { "Solo Entrada (Marcaje Duplicado)" }
             } else {
                 $horaEntrada = ""
                 $horaSalida = $ultimo.Hora24
@@ -130,14 +138,16 @@ foreach ($g in $grupos) {
         } else {
             $horaEntrada = $primero.Hora24
             $horaSalida = $ultimo.Hora24
-            $estado = "Completo"
+            $esRetraso = $primero.Segundos -gt $limiteSegundos
+            $estado = if ($esRetraso) { "Retraso" } else { "Completo" }
         }
     } else {
         $unica = $items[0]
         if ($unica.Segundos -lt (12 * 3600)) {
             $horaEntrada = $unica.Hora24
             $horaSalida = ""
-            $estado = "Solo Entrada (Falta Salida)"
+            $esRetraso = $unica.Segundos -gt $limiteSegundos
+            $estado = if ($esRetraso) { "Retraso" } else { "Solo Entrada (Falta Salida)" }
         } else {
             $horaEntrada = ""
             $horaSalida = $unica.Hora24
@@ -159,6 +169,7 @@ foreach ($g in $grupos) {
         HoraEntrada = $horaEntrada
         HoraSalida = $horaSalida
         Estado = $estado
+        EsRetraso = $esRetraso
         Observaciones = $notasUnidas
     }
 }
@@ -178,10 +189,11 @@ foreach ($gp in $gruposPersona) {
     
     $entradasCount = @($pItems | Where-Object { -not [string]::IsNullOrWhiteSpace($_.HoraEntrada) }).Count
     $salidasCount = @($pItems | Where-Object { -not [string]::IsNullOrWhiteSpace($_.HoraSalida) }).Count
+    $retrasosCount = @($pItems | Where-Object { $_.EsRetraso -eq $true }).Count
     
     $faltasEntrada = [Math]::Max(0, $TotalEntradasEsperadas - $entradasCount)
     $faltasSalida = [Math]::Max(0, $TotalSalidasEsperadas - $salidasCount)
-    $totalFaltas = $faltasEntrada + $faltasSalida
+    $totalFaltas = $faltasEntrada + $faltasSalida + $retrasosCount
     
     # Ratios contra la Base Oficial
     $entradasRatio = "$entradasCount / $TotalEntradasEsperadas"
@@ -192,7 +204,8 @@ foreach ($gp in $gruposPersona) {
         "Entradas" = $entradasRatio
         "Salidas" = $salidasRatio
         "Días Asistidos" = $diasAsistidos
-        "Faltas de Registro" = $totalFaltas
+        "Retrasos" = $retrasosCount
+        "Faltas Totales" = $totalFaltas
     }
 }
 
