@@ -235,6 +235,13 @@
             <span id="fileLoadedCount" class="text-[10px] bg-sky-200 text-sky-800 font-bold px-1.5 py-0.5 rounded-md shrink-0">0 reg</span>
           </div>
 
+          <!-- Boton Fechas Especiales -->
+          <button id="btnAbrirExcepciones" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-amber-50 hover:bg-amber-100/80 text-amber-900 border border-amber-300/80 rounded-xl text-xs font-bold shadow-xs transition">
+            <i data-lucide="calendar-cog" class="w-4 h-4 text-amber-700"></i>
+            <span>Horarios Especiales / Excepciones</span>
+            <span id="badgeCountExcepciones" class="hidden px-1.5 py-0.2 bg-amber-200 text-amber-900 rounded-full text-[10px] font-extrabold ml-1">0</span>
+          </button>
+
           <!-- Boton Vista Previa -->
           <button id="btnAbrirPreview" class="flex items-center justify-center gap-2 w-full px-4 py-2.5 bg-white hover:bg-gray-100 text-gray-700 border border-gray-300 rounded-xl text-xs font-bold shadow-xs transition">
             <i data-lucide="eye" class="w-4 h-4 text-[#0d3b66]"></i>
@@ -468,15 +475,145 @@
     </div>
   </div>
 
+  <!-- MODAL DE EXCEPCIONES Y FECHAS ESPECIALES -->
+  <div id="modalExcepciones" class="hidden fixed inset-0 z-50 bg-slate-900/70 backdrop-blur-xs flex items-center justify-center p-3 sm:p-6 overflow-y-auto">
+    <div class="bg-white max-w-2xl w-full rounded-2xl shadow-2xl border border-gray-200 overflow-hidden flex flex-col my-auto">
+      
+      <!-- Encabezado del Modal -->
+      <div class="bg-amber-50/70 px-6 py-4 border-b border-amber-200/80 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <span class="p-2 bg-amber-600 text-white rounded-lg shadow-xs">
+            <i data-lucide="calendar-cog" class="w-4 h-4"></i>
+          </span>
+          <div>
+            <h3 class="text-sm font-bold text-gray-800">Horarios Especiales y Excepciones por Fecha</h3>
+            <p class="text-[11px] text-gray-500">Configura dias con entrada tardia (ej. 8:00 AM) o salidas tempranas (ej. 10:00 AM)</p>
+          </div>
+        </div>
+        <button onclick="cerrarModalExcepciones()" class="p-1.5 text-gray-400 hover:text-gray-700 hover:bg-gray-200 rounded-lg transition">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <!-- Contenido del Formulario de Excepciones -->
+      <div class="p-6 space-y-6">
+        
+        <!-- Configuracion de Horario Estandar / Global -->
+        <div class="p-4 bg-sky-50/60 border border-sky-200/80 rounded-xl space-y-2">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="text-xs font-bold text-[#0d3b66] uppercase tracking-wider flex items-center gap-1.5">
+                <i data-lucide="clock" class="w-3.5 h-3.5"></i>
+                <span>Hora de Entrada Estandar (Global)</span>
+              </h4>
+              <p class="text-[11px] text-gray-500">Aplica a todos los dias regulares que no tengan una fecha especial asignada</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <input type="time" id="inputHoraEntradaEstandar" value="07:35" class="text-xs font-bold px-3 py-1.5 bg-white border border-sky-300 rounded-lg focus:outline-none focus:border-[#0d3b66] shadow-2xs">
+              <span class="text-[10px] text-sky-800 font-semibold bg-sky-100 px-2 py-1 rounded-md">Por defecto</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Formulario para agregar nueva excepcion -->
+        <div class="p-4 bg-gray-50 border border-gray-200 rounded-xl space-y-3">
+          <h4 class="text-xs font-bold text-[#0d3b66] uppercase tracking-wider flex items-center gap-1.5">
+            <i data-lucide="plus-circle" class="w-3.5 h-3.5"></i>
+            <span>Agregar Fecha Especial</span>
+          </h4>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+            <div class="sm:col-span-1">
+              <label class="block text-[11px] font-semibold text-gray-600 mb-1">Fecha (DD/MM/AAAA)</label>
+              <input type="text" id="excepFechaInput" placeholder="Ej. 15/09/2026" class="w-full text-xs font-semibold px-2.5 py-1.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#0d3b66]">
+            </div>
+            <div class="sm:col-span-1">
+              <label class="block text-[11px] font-semibold text-gray-600 mb-1">Limite Entrada</label>
+              <input type="time" id="excepHoraEntradaInput" value="08:00" class="w-full text-xs font-bold px-2 py-1.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#0d3b66]">
+            </div>
+            <div class="sm:col-span-1">
+              <label class="block text-[11px] font-semibold text-gray-600 mb-1">Salida Valida Desde</label>
+              <input type="time" id="excepHoraSalidaInput" value="12:00" class="w-full text-xs font-bold px-2 py-1.5 bg-white border border-gray-300 rounded-lg focus:outline-none focus:border-[#0d3b66]">
+            </div>
+            <div class="sm:col-span-1 flex items-end">
+              <button onclick="agregarExcepcion()" class="w-full py-1.5 bg-[#0d3b66] hover:bg-[#092846] text-white text-xs font-bold rounded-lg shadow-xs transition flex items-center justify-center gap-1">
+                <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+                <span>Guardar</span>
+              </button>
+            </div>
+          </div>
+          <p class="text-[10px] text-gray-500 italic">
+            * <b>Limite Entrada:</b> Despues de esta hora se considerara retraso para este dia (por defecto 07:35).<br>
+            * <b>Salida Valida Desde:</b> Los marcajes desde esta hora seran considerados Salida (por defecto 12:00 PM; para dias con salida temprana usa ej. 10:00 AM).
+          </p>
+        </div>
+
+        <!-- Lista de Excepciones Activas -->
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h4 class="text-xs font-bold text-gray-700 uppercase tracking-wider">Reglas Activas para el Periodo</h4>
+            <span id="excepContador" class="text-[11px] font-medium text-gray-500">0 reglas configuradas</span>
+          </div>
+
+          <div class="border border-gray-200 rounded-xl overflow-hidden max-h-56 overflow-y-auto">
+            <table class="w-full text-left text-xs border-collapse">
+              <thead class="bg-gray-100 text-gray-600 font-bold border-b border-gray-200 sticky top-0">
+                <tr>
+                  <th class="py-2.5 px-3">Fecha</th>
+                  <th class="py-2.5 px-3 text-center">Limite Entrada</th>
+                  <th class="py-2.5 px-3 text-center">Salida Desde</th>
+                  <th class="py-2.5 px-3 text-right">Accion</th>
+                </tr>
+              </thead>
+              <tbody id="tbodyExcepciones" class="divide-y divide-gray-100 text-gray-700">
+                <tr>
+                  <td colspan="4" class="py-4 text-center text-gray-400 italic">No hay fechas especiales configuradas (aplica entrada 07:35 AM y salida desde 12:00 PM)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pie del Modal -->
+      <div class="bg-gray-50 px-6 py-3 border-t border-gray-200 flex items-center justify-between">
+        <span class="text-[11px] text-gray-500">Los cambios se aplican al instante sobre los datos cargados</span>
+        <button onclick="cerrarModalExcepciones()" class="px-4 py-1.5 bg-[#0d3b66] hover:bg-[#092846] text-white text-xs font-bold rounded-lg transition">
+          Listo
+        </button>
+      </div>
+
+    </div>
+  </div>
+
   <script>
     lucide.createIcons();
 
-    const APP_CURRENT_VERSION = "v1.0.3";
+    const APP_CURRENT_VERSION = "v1.0.4";
     const GITHUB_REPO = "pontro/control-de-asistencias";
 
     let listaDetalles = [];
     let listaResumen = [];
     let globalRawCSV = "";
+
+    // Horarios Especiales / Excepciones por Fecha
+    // Formato: { "15/09/2026": { entradaLimite: "08:00", salidaDesde: "12:00" } }
+    let excepcionesFechas = {};
+
+    try {
+      const guardadas = localStorage.getItem('asistencias_excepciones');
+      if (guardadas) {
+        excepcionesFechas = JSON.parse(guardadas);
+      }
+      const estandarGuardado = localStorage.getItem('asistencias_hora_estandar');
+      if (estandarGuardado) {
+        const inpEst = document.getElementById('inputHoraEntradaEstandar');
+        if (inpEst) inpEst.value = estandarGuardado;
+      }
+    } catch (e) {
+      excepcionesFechas = {};
+    }
+
+    actualizarBadgeExcepciones();
 
     // Comprobar actualizaciones automaticamente al abrir la aplicacion
     verificarActualizaciones();
@@ -641,8 +778,13 @@
 
       const baseEntradas = parseInt(document.getElementById('inputBaseEntradas').value, 10) || 18;
       const baseSalidas = parseInt(document.getElementById('inputBaseSalidas').value, 10) || 17;
-      // Hora limite de entrada fija: 07:35 (7 * 3600 + 35 * 60 = 27300 segundos)
-      const limiteSegundos = (7 * 3600) + (35 * 60);
+      
+      // Hora limite de entrada estandar (por defecto 07:35)
+      const inputEstandar = document.getElementById('inputHoraEntradaEstandar');
+      const horaEstandarVal = inputEstandar ? (inputEstandar.value || '07:35') : '07:35';
+      const [ehH, ehM] = horaEstandarVal.split(':').map(Number);
+      const limiteSegundos = (ehH * 3600) + (ehM * 60);
+
       const excluirFines = document.getElementById('chkExcluirSabados').checked;
 
       for (let i = 0; i < lines.length; i++) {
@@ -651,26 +793,50 @@
         const parts = line.split(',');
         if (parts.length < 3) continue;
         const nombre = parts[0].trim().replace(/^"|"$/g, '');
-        if (nombre === "Nombre" || !nombre) continue;
+        if (nombre.toLowerCase() === "nombre" || !nombre) continue;
 
-        const diaStr = parts[1].trim().replace(/^"|"$/g, '');
-        const col3 = parts[2] ? parts[2].trim().replace(/^"|"$/g, '') : '';
-        const col4 = parts[3] ? parts[3].trim().replace(/^"|"$/g, '') : '';
-        const col5 = parts.length >= 5 ? parts.slice(4).join(',').trim().replace(/^"|"$/g, '') : '';
-
-        let horaStr = col3;
-        let periodo = '';
-        let nota = '';
-
-        const col4EsPeriodo = /^(a\.?\s*m\.?|p\.?\s*m\.?|am|pm)$/i.test(col4.trim());
-
-        if (col4EsPeriodo) {
-          periodo = col4;
-          nota = col5;
-        } else {
-          periodo = '';
-          nota = [col4, col5].filter(Boolean).join(', ').trim();
+        // Detección dinámica y robusta de columnas (soporta con/sin columna Departamento)
+        let fechaIdx = -1;
+        for (let idx = 1; idx < parts.length; idx++) {
+          if (/\b\d{1,2}\/\d{1,2}\/\d{4}\b/.test(parts[idx])) {
+            fechaIdx = idx;
+            break;
+          }
         }
+        if (fechaIdx === -1) continue;
+
+        let horaIdx = -1;
+        for (let idx = 1; idx < parts.length; idx++) {
+          if (idx !== fechaIdx && /\b\d{1,2}:\d{2}(:\d{2})?\b/.test(parts[idx])) {
+            horaIdx = idx;
+            break;
+          }
+        }
+        if (horaIdx === -1) continue;
+
+        let ampmIdx = -1;
+        for (let idx = 1; idx < parts.length; idx++) {
+          if (idx !== fechaIdx && idx !== horaIdx && /^(a\.?\s*m\.?|p\.?\s*m\.?|am|pm)$/i.test(parts[idx].trim().replace(/^"|"$/g, ''))) {
+            ampmIdx = idx;
+            break;
+          }
+        }
+
+        const diaStr = parts[fechaIdx].trim().replace(/^"|"$/g, '');
+        const horaStr = parts[horaIdx].trim().replace(/^"|"$/g, '');
+        const periodo = ampmIdx !== -1 ? parts[ampmIdx].trim().replace(/^"|"$/g, '') : '';
+        
+        // El resto de campos que no sean nombre, fecha, hora ni ampm se consideran notas/observaciones (o departamento)
+        const notasArr = [];
+        for (let idx = 1; idx < parts.length; idx++) {
+          if (idx !== fechaIdx && idx !== horaIdx && idx !== ampmIdx) {
+            const val = parts[idx].trim().replace(/^"|"$/g, '');
+            if (val && !/^(new organization|general|default)$/i.test(val)) {
+              notasArr.push(val);
+            }
+          }
+        }
+        const nota = notasArr.join(', ');
 
         const fechaSolo = diaStr.split(' ')[0];
 
@@ -737,14 +903,30 @@
         let estado = '';
         let esRetraso = false;
 
+        // Resolver limite de entrada y umbral de salida para la fecha especifica
+        let fechaLimiteSegundos = limiteSegundos; // 07:35 por defecto
+        let fechaSalidaUmbralSegundos = 12 * 3600; // 12:00 PM por defecto
+
+        if (excepcionesFechas[fecha]) {
+          const cfg = excepcionesFechas[fecha];
+          if (cfg.entradaLimite) {
+            const [eh, em] = cfg.entradaLimite.split(':').map(Number);
+            fechaLimiteSegundos = (eh * 3600) + (em * 60);
+          }
+          if (cfg.salidaDesde) {
+            const [sh, sm] = cfg.salidaDesde.split(':').map(Number);
+            fechaSalidaUmbralSegundos = (sh * 3600) + (sm * 60);
+          }
+        }
+
         if (items.length >= 2) {
           const primero = items[0];
           const ultimo = items[items.length - 1];
 
           if (ultimo.segundos - primero.segundos < 60) {
-            if (primero.segundos < 12 * 3600) {
+            if (primero.segundos < fechaSalidaUmbralSegundos) {
               horaEntrada = primero.hora24;
-              esRetraso = primero.segundos > limiteSegundos;
+              esRetraso = primero.segundos > fechaLimiteSegundos;
               estado = esRetraso ? 'Retraso' : 'Solo Entrada (Marcaje Doble)';
             } else {
               horaSalida = ultimo.hora24;
@@ -753,14 +935,14 @@
           } else {
             horaEntrada = primero.hora24;
             horaSalida = ultimo.hora24;
-            esRetraso = primero.segundos > limiteSegundos;
+            esRetraso = primero.segundos > fechaLimiteSegundos;
             estado = esRetraso ? 'Retraso' : 'Completo';
           }
         } else {
           const unica = items[0];
-          if (unica.segundos < 12 * 3600) {
+          if (unica.segundos < fechaSalidaUmbralSegundos) {
             horaEntrada = unica.hora24;
-            esRetraso = unica.segundos > limiteSegundos;
+            esRetraso = unica.segundos > fechaLimiteSegundos;
             estado = esRetraso ? 'Retraso' : 'Solo Entrada (Falta Salida)';
           } else {
             horaSalida = unica.hora24;
@@ -1106,10 +1288,136 @@
     }
 
     document.getElementById('btnAbrirPreview').addEventListener('click', abrirModalPreview);
+    document.getElementById('btnAbrirExcepciones').addEventListener('click', abrirModalExcepciones);
+
+    function abrirModalExcepciones() {
+      const modal = document.getElementById('modalExcepciones');
+      modal.classList.remove('hidden');
+      renderTablaExcepciones();
+      lucide.createIcons();
+    }
+
+    function cerrarModalExcepciones() {
+      document.getElementById('modalExcepciones').classList.add('hidden');
+    }
+
+    function actualizarBadgeExcepciones() {
+      const badge = document.getElementById('badgeCountExcepciones');
+      if (!badge) return;
+      const total = Object.keys(excepcionesFechas).length;
+      if (total > 0) {
+        badge.classList.remove('hidden');
+        badge.innerText = total;
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    document.getElementById('inputHoraEntradaEstandar').addEventListener('change', (e) => {
+      try {
+        localStorage.setItem('asistencias_hora_estandar', e.target.value || '07:35');
+      } catch (err) {}
+      if (globalRawCSV) {
+        procesarTextoCSV(globalRawCSV);
+      }
+    });
+
+    function agregarExcepcion() {
+      const fechaInput = document.getElementById('excepFechaInput');
+      const entradaInput = document.getElementById('excepHoraEntradaInput');
+      const salidaInput = document.getElementById('excepHoraSalidaInput');
+
+      let fecha = (fechaInput.value || '').trim();
+      // Validar formato fecha simple DD/MM/AAAA o YYYY-MM-DD
+      if (!fecha) {
+        alert("Por favor introduce una fecha (ej. 15/09/2026)");
+        return;
+      }
+
+      // Normalizar a DD/MM/AAAA si vino de input date YYYY-MM-DD
+      if (/^\d{4}-\d{2}-\d{2}$/.test(fecha)) {
+        const parts = fecha.split('-');
+        fecha = `${parts[2]}/${parts[1]}/${parts[0]}`;
+      }
+
+      const entradaLimite = entradaInput.value || '07:35';
+      const salidaDesde = salidaInput.value || '12:00';
+
+      excepcionesFechas[fecha] = {
+        entradaLimite,
+        salidaDesde
+      };
+
+      try {
+        localStorage.setItem('asistencias_excepciones', JSON.stringify(excepcionesFechas));
+      } catch (e) {}
+
+      fechaInput.value = '';
+      actualizarBadgeExcepciones();
+      renderTablaExcepciones();
+
+      // Recalcular datos si ya hay archivo cargado
+      if (globalRawCSV) {
+        procesarTextoCSV(globalRawCSV);
+      }
+    }
+
+    function eliminarExcepcion(fecha) {
+      delete excepcionesFechas[fecha];
+      try {
+        localStorage.setItem('asistencias_excepciones', JSON.stringify(excepcionesFechas));
+      } catch (e) {}
+      actualizarBadgeExcepciones();
+      renderTablaExcepciones();
+      if (globalRawCSV) {
+        procesarTextoCSV(globalRawCSV);
+      }
+    }
+
+    function renderTablaExcepciones() {
+      const tbody = document.getElementById('tbodyExcepciones');
+      const contador = document.getElementById('excepContador');
+      const fechas = Object.keys(excepcionesFechas).sort((a, b) => {
+        const pa = a.split('/');
+        const pb = b.split('/');
+        return (pa[2] + pa[1] + pa[0]).localeCompare(pb[2] + pb[1] + pb[0]);
+      });
+
+      contador.innerText = `${fechas.length} regla(s) configurada(s)`;
+
+      if (fechas.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="4" class="py-4 text-center text-gray-400 italic">No hay fechas especiales configuradas (aplica entrada 07:35 AM y salida desde 12:00 PM)</td>
+          </tr>
+        `;
+        return;
+      }
+
+      tbody.innerHTML = fechas.map(f => {
+        const cfg = excepcionesFechas[f];
+        return `
+          <tr class="hover:bg-gray-50/80 transition">
+            <td class="py-2.5 px-3 font-semibold text-gray-800">${f}</td>
+            <td class="py-2.5 px-3 text-center font-mono font-bold text-amber-900 bg-amber-50/50">${cfg.entradaLimite || '07:35'}</td>
+            <td class="py-2.5 px-3 text-center font-mono font-bold text-[#0d3b66]">${cfg.salidaDesde || '12:00'}</td>
+            <td class="py-2.5 px-3 text-right">
+              <button onclick="eliminarExcepcion('${f}')" class="px-2 py-1 text-xs text-rose-600 hover:text-rose-800 hover:bg-rose-50 rounded transition font-medium">
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+      lucide.createIcons();
+    }
 
     // Cerrar modal al presionar la tecla ESC
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') cerrarModalPreview();
+      if (e.key === 'Escape') {
+        cerrarModalPreview();
+        cerrarModalExcepciones();
+      }
     });
 
   </script>

@@ -1,4 +1,4 @@
-param(
+﻿param(
     [string]$RutaEntrada = "",
     [string]$RutaSalidaDetalle = "",
     [string]$RutaSalidaResumen = "",
@@ -39,27 +39,51 @@ foreach ($linea in $lineas) {
     if ($partes.Count -lt 3) { continue }
     
     $nombre = $partes[0].Trim().Trim('"')
-    if ($nombre -eq "Nombre" -or $nombre -eq "") { continue }
+    if ($nombre -ieq "Nombre" -or $nombre -eq "") { continue }
     
-    $diaStr = $partes[1].Trim().Trim('"')
-    $col3 = if ($partes.Count -ge 3) { $partes[2].Trim().Trim('"') } else { "" }
-    $col4 = if ($partes.Count -ge 4) { $partes[3].Trim().Trim('"') } else { "" }
-    $col5 = if ($partes.Count -ge 5) { ($partes[4..($partes.Count - 1)] -join ",").Trim().Trim('"') } else { "" }
-    
-    $horaStr = $col3
-    $periodo = ""
-    $nota = ""
-
-    # Detectar si Columna D es un indicador de periodo (a.m., p.m., AM, PM)
-    if ($col4 -match "^(a\.?\s*m\.?|p\.?\s*m\.?|am|pm)$") {
-        # Formato 5 columnas: Col C = Hora, Col D = Periodo, Col E = Observaciones
-        $periodo = $col4
-        $nota = $col5
-    } else {
-        # Formato 4 columnas: Col C = Hora (+ Periodo), Col D = Observaciones
-        $periodo = ""
-        $nota = @($col4, $col5 | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }) -join ", "
+    # Detección dinámica de columna de fecha
+    $fechaIdx = -1
+    for ($i = 1; $i -lt $partes.Count; $i++) {
+        if ($partes[$i] -match "\b\d{1,2}/\d{1,2}/\d{4}\b") {
+            $fechaIdx = $i
+            break
+        }
     }
+    if ($fechaIdx -eq -1) { continue }
+    
+    # Detección dinámica de columna de hora
+    $horaIdx = -1
+    for ($i = 1; $i -lt $partes.Count; $i++) {
+        if ($i -ne $fechaIdx -and $partes[$i] -match "\b\d{1,2}:\d{2}") {
+            $horaIdx = $i
+            break
+        }
+    }
+    if ($horaIdx -eq -1) { continue }
+    
+    # Detección dinámica de AM/PM
+    $ampmIdx = -1
+    for ($i = 1; $i -lt $partes.Count; $i++) {
+        if ($i -ne $fechaIdx -and $i -ne $horaIdx -and $partes[$i].Trim().Trim('"') -match "^(a\.?\s*m\.?|p\.?\s*m\.?|am|pm)$") {
+            $ampmIdx = $i
+            break
+        }
+    }
+    
+    $diaStr = $partes[$fechaIdx].Trim().Trim('"')
+    $horaStr = $partes[$horaIdx].Trim().Trim('"')
+    $periodo = if ($ampmIdx -ne -1) { $partes[$ampmIdx].Trim().Trim('"') } else { "" }
+    
+    $notasArr = @()
+    for ($i = 1; $i -lt $partes.Count; $i++) {
+        if ($i -ne $fechaIdx -and $i -ne $horaIdx -and $i -ne $ampmIdx) {
+            $val = $partes[$i].Trim().Trim('"')
+            if (-not [string]::IsNullOrWhiteSpace($val) -and $val -notmatch "^(?i)(new organization|general|default)$") {
+                $notasArr += $val
+            }
+        }
+    }
+    $nota = $notasArr -join ", "
     
     $fechaSolo = ($diaStr -split " ")[0]
     
